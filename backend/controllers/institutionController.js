@@ -2,49 +2,46 @@ const Institution = require("../models/Institution");
 const User = require("../models/User");
 const bcrypt = require("bcryptjs");
 
-// SUPER ADMIN — CREATE INSTITUTION
 exports.createInstitution = async (req, res) => {
   try {
-    const { name, address, contactEmail, adminName, adminEmail, adminPassword } = req.body;
+    const { name, address, email } = req.body;
 
-    // Check if admin already exists
-    const existingAdmin = await User.findOne({ email: adminEmail });
-    if (existingAdmin) {
-      return res.status(400).json({ message: "Admin with this email already exists" });
-    }
+    // 1) Create Institution
+    const institution = await Institution.create({
+      name,
+      address,
+      email,
+    });
 
-    // Create admin user for this institution
+    // 2) Auto-create Admin for Institution
+    const adminPassword = "Admin@123"; // You can generate random later
+
     const salt = bcrypt.genSaltSync(10);
     const passwordHash = bcrypt.hashSync(adminPassword, salt);
 
     const adminUser = await User.create({
-      name: adminName,
-      email: adminEmail,
+      name: `${name} Admin`,
+      email: `${name.toLowerCase().replace(/\s+/g, "")}@sentra.admin`, 
       passwordHash,
       role: "admin",
-      institutionId: null, // will set below
+      institutionId: institution._id,
     });
 
-    // Now create institution
-    const institution = await Institution.create({
-      name,
-      address,
-      contactEmail,
-      adminId: adminUser._id.toString(),
-    });
-
-    // Link admin to institution
-    adminUser.institutionId = institution._id.toString();
-    await adminUser.save();
+    // update institution with adminId
+    institution.adminId = adminUser._id;
+    await institution.save();
 
     res.json({
-      message: "Institution created successfully",
+      message: "Institution & Admin created successfully",
       institution,
-      adminUser,
+      adminLogin: {
+        email: adminUser.email,
+        password: adminPassword,
+      },
     });
-
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    console.error("Create Institution Error:", err);
+    res.status(500).json({ message: "Error creating institution" });
   }
 };
 

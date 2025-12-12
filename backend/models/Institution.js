@@ -1,28 +1,10 @@
 const mongoose = require("mongoose");
 
-const institutionSchema = new mongoose.Schema(
-  {
-    name: {
-      type: String,
-      required: true,
-    },
-
-    address: {
-      type: String,
-      default: "",
-    },
-
-    contactEmail: {
-      type: String,
-      default: "",
-    },
-
-    adminId: {
-      type: String, // Institution Admin user ID
-      required: true,
-    },
-  },
-  { timestamps: true }
-);
+const institutionSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  address: { type: String },
+  email: { type: String, required: true },
+  adminId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+}, { timestamps: true });
 
 module.exports = mongoose.model("Institution", institutionSchema);
