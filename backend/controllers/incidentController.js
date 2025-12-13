@@ -15,15 +15,16 @@ exports.createIncident = async (req, res) => {
       location,
       date,
       referenceId: refId,
-      anonymous,
+      anonymous: anonymous || false,
       reporterId: req.user._id,
       institutionId: req.user.institutionId,
     });
 
     res.json({ message: "Incident reported successfully", incident });
   } catch (err) {
-    res.status(500).json({ message: "Error creating incident" });
-  }
+  console.error("INCIDENT CREATE ERROR 👉", err);
+  res.status(500).json({ message: err.message});
+}
 };
 
 // Admin – Get all incidents in institution
@@ -53,5 +54,20 @@ exports.updateStatus = async (req, res) => {
     res.json({ message: "Incident updated", updated });
   } catch (err) {
     res.status(500).json({ message: "Error updating incident" });
+  }
+};
+
+// Student/Staff – Get own incidents
+exports.getMyIncidents = async (req, res) => {
+  try {
+    const incidents = await Incident.find({
+      reporterId: req.user._id,
+      institutionId: req.user.institutionId,
+    }).sort({ createdAt: -1 });
+
+    res.json(incidents);
+  } catch (err) {
+    console.error("GET MY INCIDENTS ERROR:", err);
+    res.status(500).json({ message: err.message });
   }
 };

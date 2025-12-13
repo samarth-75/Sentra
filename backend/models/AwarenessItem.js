@@ -5,12 +5,14 @@ const awarenessSchema = new mongoose.Schema(
     type: {
       type: String,
       enum: [
+        "Bullying",
+        "Harassment",
         "Safety",
+        "Health",
         "Mental Health",
         "Cyber Safety",
-        "Anti-Bullying",
         "Emergency",
-        "General"
+        "General",
       ],
       required: true,
     },
@@ -26,9 +28,10 @@ const awarenessSchema = new mongoose.Schema(
     },
 
     institutionId: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Institution",
       required: true,
-    }
+    },
   },
   { timestamps: true }
 );

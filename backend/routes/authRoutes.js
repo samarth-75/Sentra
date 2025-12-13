@@ -35,6 +35,11 @@ const {
 const auth = require("../middleware/authMiddleware");
 const role = require("../middleware/roleMiddleware");
 
+const {
+  updateIncidentStatus,
+  getMyIncidents,
+} = require("../controllers/incidentController");
+
 
 // ---------------------------------------
 // AUTH ROUTES
@@ -82,6 +87,14 @@ router.put(
   auth,
   role("admin"),
   updateStatus
+);
+
+// Student/Staff - My reports
+router.get(
+  "/incident/my",
+  auth,
+  role("student", "staff"),
+  getMyIncidents
 );
 
 

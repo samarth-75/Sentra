@@ -15,11 +15,14 @@ import Students from "./pages/admin/Students";
 import Staff from "./pages/admin/Staff";
 import Incidents from "./pages/admin/Incidents";
 import Awareness from "./pages/admin/Awareness";
+import StudentDashboard from "./pages/student/Dashboard";
+import StaffDashboard from "./pages/staff/Dashboard";
+import ReportIncident from "./pages/student/ReportIncident";
+import MyReports from "./pages/student/MyReports";
+import StudentAwareness from "./pages/student/Awareness";
 
-// OPTIONAL TEMP DASHBOARDS (until you build real ones)
-//const AdminDashboard = () => <div className="p-6">Admin Dashboard</div>;
-const StaffDashboard = () => <div className="p-6">Staff Dashboard</div>;
-const StudentDashboard = () => <div className="p-6">Student Dashboard</div>;
+
+
 
 export default function App() {
   return (
@@ -130,6 +133,50 @@ export default function App() {
       <Awareness />
     </ProtectedRoute>
   }
+/>
+
+<Route
+  path="/student/dashboard"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <StudentDashboard />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/staff/dashboard"
+  element={
+    <ProtectedRoute allowedRoles={["staff"]}>
+      <StaffDashboard />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/student/report"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <ReportIncident />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/student/reports"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <MyReports />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/student/awareness"
+  element={
+    <ProtectedRoute allowedRoles={["student"]}>
+      <StudentAwareness />
+    </ProtectedRoute>
+  }
 />
 
       </Routes>

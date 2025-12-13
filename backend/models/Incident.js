@@ -27,13 +27,8 @@ const incidentSchema = new mongoose.Schema(
         "Technical Issue",
         "Lost Item",
         "Emergency",
-        "Other"
+        "Other",
       ],
-      required: true,
-    },
-
-    date: {
-      type: Date,
       required: true,
     },
 
@@ -42,14 +37,14 @@ const incidentSchema = new mongoose.Schema(
       required: true,
     },
 
-    reporter: {
-      type: String, // userId
-      required: true,
+    date: {
+      type: Date,
+      default: Date.now, // ✅ FIX
     },
 
-    isAnonymous: {
+    anonymous: {
       type: Boolean,
-      default: false,
+      default: false, // ✅ FIX
     },
 
     status: {
@@ -58,15 +53,23 @@ const incidentSchema = new mongoose.Schema(
       default: "Pending",
     },
 
+    reporterId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true, // ✅ FIX
+    },
+
     assignedTo: {
-      type: String, // staff/admin userId
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
       default: null,
     },
 
     institutionId: {
-      type: String,
-      required: true,
-    }
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Institution",
+      required: true, // ✅ FIX
+    },
   },
   { timestamps: true }
 );
