@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import StudentLayout from "../../layout/StudentLayout";
+import StaffLayout from "../../layout/StaffLayout";
 import API from "../../services/api";
 
 export default function Awareness() {
@@ -22,7 +22,7 @@ export default function Awareness() {
   }, []);
 
   return (
-    <StudentLayout>
+    <StaffLayout>
       <h2 className="text-2xl font-bold mb-4">Awareness Hub</h2>
 
       {loading ? (
@@ -32,10 +32,7 @@ export default function Awareness() {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {items.map((item) => (
-            <div
-              key={item._id}
-              className="bg-white p-5 rounded shadow border"
-            >
+            <div key={item._id} className="bg-white p-5 rounded shadow border">
               <span className="text-sm font-medium text-blue-600">
                 {item.type}
               </span>
@@ -51,6 +48,6 @@ export default function Awareness() {
           ))}
         </div>
       )}
-    </StudentLayout>
+    </StaffLayout>
   );
 }

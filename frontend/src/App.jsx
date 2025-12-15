@@ -20,6 +20,10 @@ import StaffDashboard from "./pages/staff/Dashboard";
 import ReportIncident from "./pages/student/ReportIncident";
 import MyReports from "./pages/student/MyReports";
 import StudentAwareness from "./pages/student/Awareness";
+import StaffReportIncident from "./pages/staff/ReportIncident";
+import StaffMyReports from "./pages/staff/MyReports";
+import StaffAwareness from "./pages/staff/Awareness";
+
 
 
 
@@ -175,6 +179,32 @@ export default function App() {
   element={
     <ProtectedRoute allowedRoles={["student"]}>
       <StudentAwareness />
+    </ProtectedRoute>
+  }
+/>
+<Route
+  path="/staff/report"
+  element={
+    <ProtectedRoute allowedRoles={["staff"]}>
+      <StaffReportIncident />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/staff/reports"
+  element={
+    <ProtectedRoute allowedRoles={["staff"]}>
+      <StaffMyReports />
+    </ProtectedRoute>
+  }
+/>
+
+<Route
+  path="/staff/awareness"
+  element={
+    <ProtectedRoute allowedRoles={["staff"]}>
+      <StaffAwareness />
     </ProtectedRoute>
   }
 />
