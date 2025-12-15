@@ -140,5 +140,14 @@ router.delete(
   deleteAwareness
 );
 
+//admin dashboard stats
+const { getAdminDashboardStats } = require("../controllers/dashboardController");
+router.get(
+  "/admin/dashboard",
+  auth,
+  role("admin"),
+  getAdminDashboardStats
+);
+
 
 module.exports = router;
