@@ -29,6 +29,17 @@ export default function Incidents() {
     fetchIncidents();
   }, []);
 
+  const deleteIncident = async (id) => {
+  const confirmDelete = window.confirm(
+    "Are you sure you want to delete this incident?"
+  );
+
+  if (!confirmDelete) return;
+
+  await API.delete(`/auth/incident/delete/${id}`);
+  fetchIncidents();
+};
+
   return (
     <AdminLayout>
       <h2 className="text-2xl font-bold mb-4">Incident Reports</h2>
@@ -36,11 +47,11 @@ export default function Incidents() {
       <table className="w-full bg-white rounded shadow">
         <thead className="bg-gray-100">
           <tr>
-            <th className="p-3">Ref ID</th>
-            <th className="p-3">Title</th>
-            <th className="p-3">Reporter</th>
-            <th className="p-3">Status</th>
-            <th className="p-3">Action</th>
+            <th className="p-3 text-left">Ref ID</th>
+            <th className="p-3 text-left">Title</th>
+            <th className="p-3 text-left">Reporter</th>
+            <th className="p-3 text-left">Status</th>
+            <th className="p-3 text-left">Action</th>
           </tr>
         </thead>
 
@@ -53,7 +64,7 @@ export default function Incidents() {
                 {i.anonymous ? "Anonymous" : i.reporterId?.name}
               </td>
               <td className="p-3">{i.status}</td>
-              <td className="p-3">
+              <td className="p-3 flex gap-2">
                 <button
                   onClick={() => {
                     setSelected(i);
@@ -63,6 +74,13 @@ export default function Incidents() {
                   className="px-3 py-1 bg-blue-600 text-white rounded"
                 >
                   Manage
+                </button>
+
+                <button
+                  onClick={() => deleteIncident(i._id)}
+                  className="px-3 py-1 bg-red-600 text-white rounded"
+                >
+                  Delete
                 </button>
               </td>
             </tr>

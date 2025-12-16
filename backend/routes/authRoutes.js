@@ -149,5 +149,31 @@ router.get(
   getAdminDashboardStats
 );
 
+const { deleteIncident } = require("../controllers/incidentController");
+
+router.delete(
+  "/incident/delete/:id",
+  auth,
+  role("admin"),
+  deleteIncident
+);
+
+const { deleteInstitution } = require("../controllers/institutionController");
+
+router.delete(
+  "/institution/:id",
+  auth,
+  role("superadmin"),
+  deleteInstitution
+);
+
+const { getInstitutionById } = require("../controllers/institutionController");
+
+router.get(
+  "/institution/:id",
+  auth,
+  role("superadmin"),
+  getInstitutionById
+);
 
 module.exports = router;

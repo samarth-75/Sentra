@@ -23,7 +23,7 @@ import StudentAwareness from "./pages/student/Awareness";
 import StaffReportIncident from "./pages/staff/ReportIncident";
 import StaffMyReports from "./pages/staff/MyReports";
 import StaffAwareness from "./pages/staff/Awareness";
-
+import InstitutionDetails from "./pages/superadmin/InstitutionDetails";
 
 
 
@@ -208,6 +208,11 @@ export default function App() {
     </ProtectedRoute>
   }
 />
+
+<Route 
+      path="/superadmin/institutions/:id"
+      element={<InstitutionDetails />}
+    />
 
       </Routes>
     </BrowserRouter>

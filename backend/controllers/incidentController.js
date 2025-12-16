@@ -71,3 +71,13 @@ exports.getMyIncidents = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+// Admin – Delete incident
+exports.deleteIncident = async (req, res) => {
+  try {
+    await Incident.findByIdAndDelete(req.params.id);
+    res.json({ message: "Incident deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: "Error deleting incident" });
+  }
+};

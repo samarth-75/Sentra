@@ -54,3 +54,33 @@ exports.getAllInstitutions = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
+
+
+exports.deleteInstitution = async (req, res) => {
+  try {
+    const institutionId = req.params.id;
+
+    // delete institution
+    await Institution.findByIdAndDelete(institutionId);
+
+    // optional but recommended: delete related users
+    await User.deleteMany({ institutionId });
+
+    res.json({ message: "Institution deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
+exports.getInstitutionById = async (req, res) => {
+  try {
+    const institution = await Institution.findById(req.params.id);
+    if (!institution) {
+      return res.status(404).json({ message: "Institution not found" });
+    }
+    res.json(institution);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

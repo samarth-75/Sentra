@@ -68,10 +68,12 @@ export default function ReportIncident() {
         >
           <option value="">Select Category</option>
           <option>Bullying</option>
-          <option>Harassment</option>
-          <option>Safety</option>
-          <option>Health</option>
-          <option>Other</option>
+<option>Harassment</option>
+<option>Safety Issue</option>
+<option>Technical Issue</option>
+<option>Lost Item</option>
+<option>Emergency</option>
+<option>Other</option>
         </select>
 
         <input

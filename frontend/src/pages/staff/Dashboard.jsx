@@ -1,35 +1,73 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import StaffLayout from "../../layout/StaffLayout";
+import API from "../../services/api";
 
 export default function StaffDashboard() {
+  const navigate = useNavigate();
+
+  const [total, setTotal] = useState(0);
+  const [pending, setPending] = useState(0);
+  const [resolved, setResolved] = useState(0);
+
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      const res = await API.get("/auth/incident/my");
+      const incidents = res.data;
+
+      setTotal(incidents.length);
+      setPending(incidents.filter(i => i.status === "Pending").length);
+      setResolved(incidents.filter(i => i.status === "Resolved").length);
+    } catch (err) {
+      console.error("Dashboard stats error:", err);
+    }
+  };
+
   return (
     <StaffLayout>
-      <h2 className="text-2xl font-bold mb-4">Welcome 👋</h2>
+      <h2 className="text-2xl font-bold mb-6">Welcome 👋</h2>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="bg-white p-6 rounded shadow">
-          <p className="text-gray-600">Total Reports</p>
-          <h3 className="text-3xl font-bold text-blue-600">0</h3>
-        </div>
-
-        <div className="bg-white p-6 rounded shadow">
-          <p className="text-gray-600">Pending</p>
-          <h3 className="text-3xl font-bold text-yellow-500">0</h3>
-        </div>
-
-        <div className="bg-white p-6 rounded shadow">
-          <p className="text-gray-600">Resolved</p>
-          <h3 className="text-3xl font-bold text-green-600">0</h3>
-        </div>
+      {/* STATS */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <StatCard title="Total Reports" value={total} color="text-blue-600" />
+        <StatCard title="Pending" value={pending} color="text-yellow-500" />
+        <StatCard title="Resolved" value={resolved} color="text-green-600" />
       </div>
 
-      <div className="mt-8 bg-white p-6 rounded shadow">
-        <h3 className="text-lg font-semibold mb-2">Staff Capabilities</h3>
-        <ul className="list-disc list-inside text-gray-700">
-          <li>Report incidents</li>
-          <li>Track reports</li>
-          <li>Access awareness content</li>
-        </ul>
+      {/* ACTION BUTTONS */}
+      <div className="bg-white p-6 rounded shadow">
+        <h3 className="text-lg font-semibold mb-4">Staff Actions</h3>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <ActionButton label="Report Incident" onClick={() => navigate("/staff/report")} />
+          <ActionButton label="My Reports" onClick={() => navigate("/staff/my-reports")} />
+          <ActionButton label="Awareness Hub" onClick={() => navigate("/staff/awareness")} />
+        </div>
       </div>
     </StaffLayout>
+  );
+}
+
+function StatCard({ title, value, color }) {
+  return (
+    <div className="bg-white p-6 rounded shadow">
+      <p className="text-gray-600">{title}</p>
+      <h3 className={`text-3xl font-bold ${color}`}>{value}</h3>
+    </div>
+  );
+}
+
+function ActionButton({ label, onClick }) {
+  return (
+    <button
+      onClick={onClick}
+      className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+    >
+      {label}
+    </button>
   );
 }
