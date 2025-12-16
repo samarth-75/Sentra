@@ -9,7 +9,13 @@ const institutionRoutes = require("./routes/institutionRoutes");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://localhost:5173",
+    "https://sentra-eight.vercel.app"
+   ], // change if your frontend uses another host/port
+  credentials: true,
+}));
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
