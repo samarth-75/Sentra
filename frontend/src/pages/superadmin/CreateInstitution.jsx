@@ -1,6 +1,8 @@
 import { useState } from "react";
 import API from "../../services/api";
 import SuperAdminLayout from "../../layout/SuperAdminLayout";
+import toast from "react-hot-toast";  
+import { sendCredentials } from "../../utils/sendCredentials";
 
 export default function CreateInstitution() {
   const [name, setName] = useState("");
@@ -10,18 +12,17 @@ export default function CreateInstitution() {
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    try {
-      const res = await API.post("/auth/create-institution", {
-        name,
-        address,
-        email,
-      });
+     try {
+    const res = await API.post("/auth/create-institution", form);
 
-      setResult(res.data); // save result to show admin login
-    } catch (err) {
-      console.error(err);
-      alert("Error creating institution");
-    }
+    const admin = res.data.adminCredentials; // backend will return this
+
+    await sendCredentials(admin);
+
+    toast.success("Institution & Admin created. Credentials sent to email!");
+  } catch {
+    toast.error("Institution creation failed");
+  }
   };
 
   return (

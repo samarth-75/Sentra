@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import API from "../../services/api";
 import SuperAdminLayout from "../../layout/SuperAdminLayout";
+import toast from "react-hot-toast";
 
 export default function InstitutionsList() {
   const [institutions, setInstitutions] = useState([]);
@@ -30,7 +31,7 @@ export default function InstitutionsList() {
       await API.delete(`/auth/institution/${id}`);
       fetchInstitutions(); // refresh list
     } catch (err) {
-      alert("Failed to delete institution");
+      toast.error("Failed to delete institution");
     }
   };
 

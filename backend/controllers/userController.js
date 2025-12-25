@@ -23,7 +23,12 @@ exports.addUser = async (req, res) => {
 
     res.json({
       message: "User added successfully",
-      user,
+      user: {
+        name,
+        email,
+        role,
+        password: plainPassword
+      },
     });
 
   } catch (error) {

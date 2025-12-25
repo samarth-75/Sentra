@@ -1,6 +1,7 @@
 import { useState } from "react";
 import StudentLayout from "../../layout/StudentLayout";
 import API from "../../services/api";
+import toast from "react-hot-toast";
 
 export default function ReportIncident() {
   const [form, setForm] = useState({
@@ -19,9 +20,10 @@ export default function ReportIncident() {
 
   const submitIncident = async (e) => {
     e.preventDefault();
+    try{
 
     await API.post("/auth/incident/create", form);
-    alert("Incident reported successfully");
+    toast.success("Incident reported successfully");
 
     setForm({
       title: "",
@@ -31,6 +33,10 @@ export default function ReportIncident() {
       date: "",
       anonymous: false,
     });
+  }
+    catch (err) {
+      toast.error("Failed to report incident. Please try again.");
+    }
   };
 
   return (

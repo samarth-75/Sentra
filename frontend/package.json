@@ -10,13 +10,13 @@
     "preview": "vite preview",
     "tailwind": "node ./node_modules/tailwindcss/lib/cli.js -i ./src/index.css -o ./src/output.css --watch",
     "seed:superadmin": "node seeder/superAdminSeeder.js"
-
   },
   "dependencies": {
     "@tailwindcss/postcss": "^4.1.17",
     "axios": "^1.13.2",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-hot-toast": "^2.6.0",
     "react-router-dom": "^7.10.1",
     "zustand": "^5.0.9"
   },
