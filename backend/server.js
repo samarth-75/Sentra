@@ -9,18 +9,26 @@ const institutionRoutes = require("./routes/institutionRoutes");
 
 const app = express();
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://sentra-n0qg0jhbd-samarth-75s-projects.vercel.app",
+  "https://sentra-n0qg0jhbd.vercel.app",
+];
+
 app.use(
   cors({
-    origin: [
-      "http://localhost:5173",
-      "https://sentra-n0qg0jhbd-samarth-75s-projects.vercel.app",
-      "https://sentra-n0qg0jhbd.vercel.app",
-    ],
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
 app.use(express.json());
-app.options("*", cors());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/incidents", incidentRoutes);
 app.use("/api/awareness", awarenessRoutes); 
