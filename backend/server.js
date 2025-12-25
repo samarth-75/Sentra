@@ -9,15 +9,18 @@ const institutionRoutes = require("./routes/institutionRoutes");
 
 const app = express();
 
-app.use(cors({
-  origin: [
-    "https://localhost:5173",
-    "https://sentra-eight.vercel.app"
-   ], // change if your frontend uses another host/port
-  credentials: true,
-}));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://sentra-n0qg0jhbd-samarth-75s-projects.vercel.app",
+      "https://sentra-n0qg0jhbd.vercel.app",
+    ],
+    credentials: true,
+  })
+);
 app.use(express.json());
-
+app.options("*", cors());
 app.use("/api/auth", authRoutes);
 app.use("/api/incidents", incidentRoutes);
 app.use("/api/awareness", awarenessRoutes); 
