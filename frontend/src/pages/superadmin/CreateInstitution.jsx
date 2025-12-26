@@ -11,19 +11,37 @@ export default function CreateInstitution() {
   const [result, setResult] = useState(null);
 
   const handleCreate = async (e) => {
-    e.preventDefault();
-     try {
-    const res = await API.post("/auth/create-institution", form);
+  e.preventDefault();
 
-    const admin = res.data.adminCredentials; // backend will return this
+  try {
+    const payload = { name, email, address };
+    
 
-    await sendCredentials(admin);
+    const res = await API.post("/auth/create-institution", payload);
+    
 
-    toast.success("Institution & Admin created. Credentials sent to email!");
-  } catch {
-    toast.error("Institution creation failed");
+    toast.success("Institution & Admin created successfully!");
+
+    const admin = res.data.adminCredentials;
+    
+
+    if (!admin || !admin.email || !admin.password) {
+      throw new Error("Invalid admin credentials payload");
+    }
+
+    try {
+      await sendCredentials(admin);
+      toast.success("Credentials sent to email!");
+    } catch (mailErr) {
+      console.error("EMAIL ERROR:", mailErr);
+      toast.error("Institution created, but email failed.");
+    }
+
+  } catch (err) {
+    console.error("CREATE ERROR:", err.response?.data || err.message);
+    toast.error(err.response?.data?.message || err.message || "Institution creation failed");
   }
-  };
+};
 
   return (
     <SuperAdminLayout>
