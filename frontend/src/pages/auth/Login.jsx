@@ -113,12 +113,12 @@ export default function Login() {
               <Credential
                 role="Student"
                 email="demoStudent@gmail.com"
-                password="2lbji8ynA1@"
+                password="ffuk5m9ma3A1@"
               />
               <Credential
                 role="Staff"
                 email="demoStaff@gmail.com"
-                password="uhhnaz2mA1@"
+                password="c6whe202tcA1@"
               />
             </div>
           </div>

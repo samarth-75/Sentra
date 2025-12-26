@@ -18,26 +18,31 @@ export default function Students() {
   };
 
   const addStudent = async (e) => {
-    e.preventDefault();
-    try{
+  e.preventDefault();
+
+  try {
     const res = await API.post("/auth/add-user", {
       name,
       email,
       role: "student",
     });
 
-    await sendCredentials(res.data.user);
+    toast.success("Student created successfully!");
 
-    toast.success("User created & credentials emailed!");
-  } catch {
-    toast.error("Failed to create user");
-  }
-
-    // store password for UI display (not stored in DB)
-    setNewPassword({ ...newPassword, [res.data.user._id]: res.data.password });
+    // send email
+    try {
+      await sendCredentials(res.data.credentials);
+      toast.success("Credentials emailed!");
+    } catch {
+      toast.error("Student created, but email failed");
+    }
 
     fetchStudents();
-  };
+
+  } catch (err) {
+    toast.error(err.response?.data?.message || "Failed to create student");
+  }
+};
 
   const deleteStudent = async (id) => {
     await API.delete(`/auth/user/${id}`);

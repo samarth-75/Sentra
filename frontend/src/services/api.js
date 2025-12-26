@@ -2,7 +2,7 @@
 import axios from "axios";
 
 const API = axios.create({
-  baseURL: "http://localhost:5000/api", // change if your backend uses another host/port
+  baseURL: "https://sentra-psic.onrender.com/api", // change if your backend uses another host/port
   headers: {
     "Content-Type": "application/json",
   },

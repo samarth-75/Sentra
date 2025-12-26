@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import AdminLayout from "../../layout/AdminLayout";
 import API from "../../services/api";
 import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { sendCredentials } from "../../utils/sendCredentials";
+import toast from "react-hot-toast";
 
 export default function Staff() {
   const [staff, setStaff] = useState([]);
@@ -9,32 +11,42 @@ export default function Staff() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
-  // Fetch all staff
   const fetchStaff = async () => {
     const res = await API.get("/auth/users/staff");
     setStaff(res.data);
   };
 
-  // Add new staff
   const addStaff = async (e) => {
     e.preventDefault();
 
-    await API.post("/auth/add-user", {
-      name,
-      email,
-      role: "staff",
-    });
+    try {
+      const res = await API.post("/auth/add-user", {
+        name,
+        email,
+        role: "staff",
+      });
 
-    fetchStaff(); // reload list
+      toast.success("Staff created successfully!");
+
+      try {
+        await sendCredentials(res.data.credentials);
+        toast.success("Credentials emailed!");
+      } catch {
+        toast.error("Staff created, but email failed");
+      }
+
+      fetchStaff();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Failed to create staff");
+    }
   };
 
-  // Delete staff
   const deleteStaff = async (id) => {
     await API.delete(`/auth/user/${id}`);
+    toast.success("Staff deleted");
     fetchStaff();
   };
 
-  // Toggle password visibility per staff member
   const toggleVisibility = (id) => {
     setVisibility({ ...visibility, [id]: !visibility[id] });
   };
@@ -47,7 +59,6 @@ export default function Staff() {
     <AdminLayout>
       <h2 className="text-2xl font-bold mb-4">Staff Members</h2>
 
-      {/* Add Staff Form */}
       <form
         onSubmit={addStaff}
         className="flex gap-3 bg-white p-4 rounded shadow w-fit"
@@ -57,6 +68,7 @@ export default function Staff() {
           placeholder="Name"
           className="p-2 border rounded"
           onChange={(e) => setName(e.target.value)}
+          required
         />
 
         <input
@@ -64,6 +76,7 @@ export default function Staff() {
           placeholder="Email"
           className="p-2 border rounded"
           onChange={(e) => setEmail(e.target.value)}
+          required
         />
 
         <button className="bg-blue-600 text-white px-4 rounded">
@@ -71,7 +84,6 @@ export default function Staff() {
         </button>
       </form>
 
-      {/* Staff Table */}
       <table className="w-full mt-6 bg-white shadow rounded">
         <thead className="bg-gray-100">
           <tr>
@@ -88,7 +100,6 @@ export default function Staff() {
               <td className="p-3">{s.name}</td>
               <td className="p-3">{s.email}</td>
 
-              {/* PASSWORD */}
               <td className="p-3 flex items-center gap-2">
                 {visibility[s._id] ? s.plainPassword : "••••••••"}
 
@@ -101,7 +112,6 @@ export default function Staff() {
                 </button>
               </td>
 
-              {/* DELETE BUTTON */}
               <td className="p-3">
                 <button
                   onClick={() => deleteStaff(s._id)}
