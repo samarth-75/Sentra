@@ -11,7 +11,7 @@ const app = express();
 
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://sentra-dxlvrb0g5-samarth-75s-projects.vercel.app/",
+  "https://sentra-dxlvrb0g5-samarth-75s-projects.vercel.app",
   "https://sentra-n0qg0jhbd.vercel.app",
   "https://sentra-wi3jdszs7-samarth-75s-projects.vercel.app",
 ];
